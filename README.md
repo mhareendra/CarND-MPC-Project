@@ -1,8 +1,42 @@
+[//]: # (Image References)
+
+[gif1]: ./Videos/run.gif
+
 # CarND-Controls-MPC
 Self-Driving Car Engineer Nanodegree Program
+---
+### Model
+
+The vehicle model used here is the kinematic model which ignores dynamic effects (friction, inertia etc.) . The following are the equations in this model:
+
+      // x_[t+1] = x[t] + v[t] * cos(psi[t]) * dt
+      // y_[t+1] = y[t] + v[t] * sin(psi[t]) * dt
+      // psi_[t+1] = psi[t] + v[t] / Lf * delta[t] * dt
+      // v_[t+1] = v[t] + a[t] * dt
+      // cte[t+1] = f(x[t]) - y[t] + v[t] * sin(epsi[t]) * dt
+      // epsi[t+1] = psi[t] - psides[t] + v[t] * delta[t] / Lf * dt
+
+The state and actuation from the previous timestamp are used in calculating the state for current timestamp.
+
+### Timestep Length and Elapsed duration (N & dt)
+
+Values for N and dt were chosen to be 10 and 0.1 respectively. The values were decided upon to make sure that the car drives reasonably smoothly around the track. Other values tried affected the car's ability to stay on the road. To
+
+### Polynomial Fitting and MPC Preprocessing
+
+To help the polynomial fitting operation, the waypoints are transformed to the vehicle's coordinate system. This involves shifting the points to the origin and then applying a 2D rotation. A third order polynomial is then fitted to the points.
+
+### Model Predictive Control with Latency
+
+To deal with the latency of 100ms, the speed of the car and its steer were controlled by applying a penalty (line 61 in MPC.cpp). This also helps a lot in keeping the car centered on the road.
+
+
+Video of the car driving around the track : 
+
+![alt text][gif1]
 
 ---
-
+# Original ReadMe
 ## Dependencies
 
 * cmake >= 3.5
